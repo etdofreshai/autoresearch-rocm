@@ -462,8 +462,8 @@ SCALAR_LR = 0.5         # learning rate for per-layer scalars (Adam)
 WEIGHT_DECAY = 0.2      # cautious weight decay for Muon
 ADAM_BETAS = (0.8, 0.95) # Adam beta1, beta2
 WARMUP_RATIO = 0.0      # fraction of time budget for LR warmup
-WARMDOWN_RATIO = 0.5    # fraction of time budget for LR warmdown
-FINAL_LR_FRAC = 0.0     # final LR as fraction of initial
+WARMDOWN_RATIO = 0.3    # shorter warmdown to spend more of the 5-minute run learning
+FINAL_LR_FRAC = 0.1     # keep a small LR floor instead of annealing fully to zero
 
 # Model size
 DEPTH = int(os.environ.get("AUTORESEARCH_DEPTH", "2"))
