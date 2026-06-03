@@ -1,0 +1,34 @@
+services:
+  autoresearch:
+    build:
+      context: .
+    image: autoresearch-rocm:latest
+    restart: unless-stopped
+    environment:
+      AUTORESEARCH_PREPARE_ON_START: "1"
+      AUTORESEARCH_TRAIN_ON_START: "0"
+      AUTORESEARCH_NUM_SHARDS: "2"
+      AUTORESEARCH_DOWNLOAD_WORKERS: "2"
+      AUTORESEARCH_MAX_SEQ_LEN: "512"
+      AUTORESEARCH_TIME_BUDGET: "60"
+      AUTORESEARCH_EVAL_TOKENS: "262144"
+      AUTORESEARCH_VOCAB_SIZE: "4096"
+      AUTORESEARCH_WINDOW_PATTERN: "L"
+      AUTORESEARCH_TOTAL_BATCH_SIZE: "16384"
+      AUTORESEARCH_DEPTH: "2"
+      AUTORESEARCH_DEVICE_BATCH_SIZE: "8"
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - "44"
+      - "993"
+    security_opt:
+      - seccomp=unconfined
+    ipc: host
+    volumes:
+      - autoresearch_data:/data
+    ports:
+      - "8080"
+volumes:
+  autoresearch_data:
