@@ -40,6 +40,9 @@ def log(msg: str):
 
 def run(cmd, timeout=None, check=True, env=None):
     log("$ " + (cmd if isinstance(cmd, str) else " ".join(cmd)))
+    if env is None:
+        env = os.environ.copy()
+    env.setdefault('GIT_ASKPASS', '/tmp/git-askpass-hermes')
     p = subprocess.run(cmd, cwd=REPO, shell=isinstance(cmd, str), text=True,
                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                        timeout=timeout, env=env)
