@@ -11,6 +11,7 @@ import re
 import subprocess
 import sys
 import time
+import shlex
 import urllib.parse
 import warnings
 from datetime import datetime, timezone
@@ -193,7 +194,8 @@ Commit your train.py change with a concise message describing the hypothesis.
 """.strip()
     env = os.environ.copy()
     env['GIT_ASKPASS'] = '/tmp/git-askpass-hermes'
-    run(['codex', 'exec', '--full-auto', prompt], timeout=900, env=env)
+    quoted = shlex.quote('codex exec --full-auto ' + shlex.quote(prompt))
+    run(f"script -q -e -c {quoted} /dev/null", timeout=900, env=env)
     changed = run('git diff --stat HEAD~1..HEAD -- train.py && git diff --name-only HEAD~1..HEAD', timeout=60)
     if 'train.py' not in changed:
         raise RuntimeError('Codex did not commit a train.py experiment')
