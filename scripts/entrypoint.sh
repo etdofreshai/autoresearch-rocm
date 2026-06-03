@@ -3,7 +3,7 @@ set -euo pipefail
 mkdir -p /data/cache /data/runs /data/status
 export HOME=/data
 export AUTORESEARCH_CACHE_DIR=${AUTORESEARCH_CACHE_DIR:-/data/cache}
-cd /app
+cd "$(dirname "$0")/.."
 {
   echo "AUTORESEARCH_ROCM_START $(date -Is)"
   echo "devices:"; ls -l /dev/kfd /dev/dri 2>&1 || true
