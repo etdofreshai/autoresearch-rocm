@@ -456,7 +456,7 @@ WINDOW_PATTERN = os.environ.get("AUTORESEARCH_WINDOW_PATTERN", "L")
 # Optimization
 TOTAL_BATCH_SIZE = int(os.environ.get("AUTORESEARCH_TOTAL_BATCH_SIZE", str(2**14)))
 EMBEDDING_LR = 0.6      # learning rate for token embeddings (Adam)
-UNEMBEDDING_LR = 0.004  # learning rate for lm_head (Adam)
+UNEMBEDDING_LR = 0.006  # slightly faster lm_head adaptation for short depth-4 ROCm runs
 MATRIX_LR = 0.035       # slightly lower Muon LR for steadier depth-4 ROCm updates
 SCALAR_LR = 0.5         # learning rate for per-layer scalars (Adam)
 WEIGHT_DECAY = 0.1      # lighter Muon decay to preserve capacity in the short 5-minute run
