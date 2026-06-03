@@ -26,7 +26,7 @@ COPY scripts/ /app/scripts/
 
 RUN python3 -m pip install --upgrade pip \
     && python3 -m pip install uv \
-    && uv pip install --system -r pyproject.toml
+    && uv pip install --system .
 
 VOLUME /data
 EXPOSE 8080
