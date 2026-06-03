@@ -11,7 +11,6 @@ import re
 import subprocess
 import sys
 import time
-import shlex
 import urllib.parse
 import warnings
 from datetime import datetime, timezone
@@ -192,10 +191,11 @@ Prefer simple changes likely to improve validation bpb on small AMD iGPU: optimi
 Do not run training locally; the GPU run happens remotely after you commit.
 Commit your train.py change with a concise message describing the hypothesis.
 """.strip()
-    env = os.environ.copy()
-    env['GIT_ASKPASS'] = '/tmp/git-askpass-hermes'
-    quoted = shlex.quote('codex exec --full-auto ' + shlex.quote(prompt))
-    run(f"script -q -e -c {quoted} /dev/null", timeout=900, env=env)
+    hermes_cmd = [
+        'hermes', 'chat', '-Q', '--provider', 'openai-codex', '-m', 'gpt-5.5',
+        '--yolo', '-t', 'file,terminal', '-q', prompt,
+    ]
+    run(hermes_cmd, timeout=900)
     changed = run('git diff --stat HEAD~1..HEAD -- train.py && git diff --name-only HEAD~1..HEAD', timeout=60)
     if 'train.py' not in changed:
         raise RuntimeError('Codex did not commit a train.py experiment')
