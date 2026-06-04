@@ -454,7 +454,7 @@ HEAD_DIM = 128          # target head dimension for attention
 WINDOW_PATTERN = os.environ.get("AUTORESEARCH_WINDOW_PATTERN", "L")
 
 # Optimization
-TOTAL_BATCH_SIZE = 8192    # one 16x512 microstep: twice as many optimizer updates in the fixed run
+TOTAL_BATCH_SIZE = 12288   # one 24x512 microstep: more tokens/update while retaining no accumulation overhead
 EMBEDDING_LR = 0.6      # learning rate for token embeddings (Adam)
 UNEMBEDDING_LR = 0.007  # test a modestly faster lm_head adapter with all-layer value embeddings
 MATRIX_LR = 0.035       # slightly lower Muon LR for steadier depth-4 ROCm updates
@@ -467,9 +467,9 @@ FINAL_LR_FRAC = 0.1     # keep a small LR floor instead of annealing fully to ze
 
 # Model size
 DEPTH = int(os.environ.get("AUTORESEARCH_DEPTH", "2"))
-# Keep the larger per-device microbatch and halve total batch to one microstep.
-# This trades noisier gradients for twice as many optimizer updates in the fixed run.
-DEVICE_BATCH_SIZE = 16
+# Keep a one-microstep optimizer update, nudged larger than the current 16x512 best.
+# Hypothesis: 24 rows improves gradient quality with little ROCm iGPU overhead.
+DEVICE_BATCH_SIZE = 24
 
 # ---------------------------------------------------------------------------
 # Setup: tokenizer, model, optimizer, dataloader
