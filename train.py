@@ -467,7 +467,9 @@ FINAL_LR_FRAC = 0.1     # keep a small LR floor instead of annealing fully to ze
 
 # Model size
 DEPTH = int(os.environ.get("AUTORESEARCH_DEPTH", "2"))
-DEVICE_BATCH_SIZE = int(os.environ.get("AUTORESEARCH_DEVICE_BATCH_SIZE", "8"))
+# Use a larger per-device microbatch to reduce accumulation overhead on the 890M.
+# Total batch stays fixed at 16384 tokens, so this tests throughput/updates-per-budget only.
+DEVICE_BATCH_SIZE = 16
 
 # ---------------------------------------------------------------------------
 # Setup: tokenizer, model, optimizer, dataloader
